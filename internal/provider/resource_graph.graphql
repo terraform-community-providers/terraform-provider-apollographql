@@ -1,0 +1,53 @@
+fragment Service on Service {
+  id
+  title
+  onboardingArchitecture
+  accountId
+  description
+}
+
+query getService($id: ID!) {
+  service(id: $id) {
+    ...Service
+  }
+}
+
+mutation createService(
+  $id: ID!
+  $title: String!
+  $onboardingArchitecture: OnboardingArchitecture!
+  $accountId: ID!
+  $description: String
+) {
+  newService(
+    id: $id
+    title: $title
+    onboardingArchitecture: $onboardingArchitecture
+    accountId: $accountId
+    description: $description
+  ) {
+    ...Service
+  }
+}
+
+mutation updateServiceTitle($id: ID!, $title: String!) {
+  service(id: $id) {
+    updateTitle(title: $title) {
+      ...Service
+    }
+  }
+}
+
+mutation updateServiceDescription($id: ID!, $description: String!) {
+  service(id: $id) {
+    updateDescription(description: $description) {
+      ...Service
+    }
+  }
+}
+
+mutation deleteService($id: ID!) {
+  service(id: $id) {
+    delete
+  }
+}

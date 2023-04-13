@@ -1,0 +1,46 @@
+fragment Variant on GraphVariant {
+  id
+  name
+  isPublic
+  graphId
+}
+
+query getVariant($serviceId: ID!, $variantName: String!) {
+  service(id: $serviceId) {
+    variant(name: $variantName) {
+      ...Variant
+    }
+  }
+}
+
+mutation createVariant($serviceId: ID!, $variantName: String!) {
+  service(id: $serviceId) {
+    uploadSchema(tag: $variantName, schemaDocument: "scalar JSON") {
+      success
+    }
+  }
+}
+
+mutation updateVariantIsPublic(
+  $serviceId: ID!
+  $variantName: String!
+  $isPublic: Boolean!
+) {
+  service(id: $serviceId) {
+    variant(name: $variantName) {
+      updateVariantIsPublic(isPublic: $isPublic) {
+        ...Variant
+      }
+    }
+  }
+}
+
+mutation deleteVariant($serviceId: ID!, $variantName: String!) {
+  service(id: $serviceId) {
+    variant(name: $variantName) {
+      delete {
+        deleted
+      }
+    }
+  }
+}

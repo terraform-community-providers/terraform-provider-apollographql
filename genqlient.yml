@@ -1,0 +1,13 @@
+schema: schema.graphql
+operations:
+  - internal/provider/*.graphql
+generated: internal/provider/generated.go
+bindings:
+  OnboardingArchitecture:
+    type: string
+  Void:
+    type: interface{}
+  Timestamp:
+    type: time.Time
+  JSON:
+    type: map[string]interface{}
