@@ -130,7 +130,7 @@ func (r *VariantResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 
 	if data.Public.ValueBool() {
-		err := updateVariantPublic(ctx, *r.client, data)
+		err := updatePublic(ctx, *r.client, data)
 
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update variant, got error: %s", err))
@@ -188,7 +188,7 @@ func (r *VariantResource) Update(ctx context.Context, req resource.UpdateRequest
 	}
 
 	if data.Public.ValueBool() != state.Public.ValueBool() {
-		err := updateVariantPublic(ctx, *r.client, data)
+		err := updatePublic(ctx, *r.client, data)
 
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update variant, got error: %s", err))
@@ -248,7 +248,7 @@ func readVariant(ctx context.Context, client graphql.Client, serviceId string, v
 	return &variant, nil
 }
 
-func updateVariantPublic(ctx context.Context, client graphql.Client, data *VariantResourceModel) error {
+func updatePublic(ctx context.Context, client graphql.Client, data *VariantResourceModel) error {
 	response, err := updateVariantIsPublic(ctx, client, data.GraphId.ValueString(), data.Name.ValueString(), data.Public.ValueBool())
 
 	if err != nil {

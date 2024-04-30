@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+var id = fmt.Sprintf("todo-api-%s", uuid.New().String())
 
 func TestAccGraphResourceDefault(t *testing.T) {
 	resource.Test(t, resource.TestCase{
@@ -14,9 +17,9 @@ func TestAccGraphResourceDefault(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccGraphResourceConfigDefault("todo-api-tf-test", "Todo API"),
+				Config: testAccGraphResourceConfigDefault(id, "Todo API"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("apollographql_graph.test", "id", "todo-api-tf-test"),
+					resource.TestCheckResourceAttr("apollographql_graph.test", "id", id),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "title", "Todo API"),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "onboarding_architecture", "MONOLITH"),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "organization_id", "pksunkara"),
@@ -31,9 +34,9 @@ func TestAccGraphResourceDefault(t *testing.T) {
 			},
 			// Update with default values
 			{
-				Config: testAccGraphResourceConfigDefault("todo-api-tf-test", "Todo API"),
+				Config: testAccGraphResourceConfigDefault(id, "Todo API"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("apollographql_graph.test", "id", "todo-api-tf-test"),
+					resource.TestCheckResourceAttr("apollographql_graph.test", "id", id),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "title", "Todo API"),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "onboarding_architecture", "MONOLITH"),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "organization_id", "pksunkara"),
@@ -42,9 +45,9 @@ func TestAccGraphResourceDefault(t *testing.T) {
 			},
 			// Update and Read testing
 			{
-				Config: testAccGraphResourceConfigDefaultUpdate("todo-api-tf-test", "Todo app API"),
+				Config: testAccGraphResourceConfigDefaultUpdate(id, "Todo app API"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("apollographql_graph.test", "id", "todo-api-tf-test"),
+					resource.TestCheckResourceAttr("apollographql_graph.test", "id", id),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "title", "Todo app API"),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "onboarding_architecture", "MONOLITH"),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "organization_id", "pksunkara"),
@@ -81,10 +84,6 @@ resource "apollographql_graph" "test" {
 
   organization_id = "pksunkara"
   description = "API for our todo app"
-
-  default_variant = {
-    public = true
-  }
 }
 `, id, title)
 }

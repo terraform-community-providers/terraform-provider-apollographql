@@ -170,6 +170,7 @@ func (r *GraphResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
 func (r *GraphResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *GraphResourceModel
+	var state *GraphResourceModel
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 
@@ -177,37 +178,31 @@ func (r *GraphResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
-	// TODO: Allow updating title and description
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 
-	// input := ProjectUpdateInput{
-	// 	Name:        data.Name.ValueString(),
-	// 	Description: data.Description.ValueString(),
-	// 	IsPublic:    !data.Private.ValueBool(),
-	// 	PrDeploys:   data.HasPrDeploys.ValueBool(),
-	// }
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
-	// resp.Diagnostics.Append(data.DefaultVariant.As(ctx, &defaultVariantData, basetypes.ObjectAsOptions{})...)
+	if data.Title.ValueString() != state.Title.ValueString() {
+		err := updateTitle(ctx, *r.client, data)
 
-	// if resp.Diagnostics.HasError() {
-	// 	return
-	// }
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update graph, got error: %s", err))
+			return
+		}
+	}
 
-	// response, err := updateProject(ctx, *r.client, data.Id.ValueString(), input)
+	if data.Description.ValueString() != state.Description.ValueString() {
+		err := updateDescription(ctx, *r.client, data)
 
-	// if err != nil {
-	// 	resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update graph, got error: %s", err))
-	// 	return
-	// }
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update graph, got error: %s", err))
+			return
+		}
+	}
 
-	// tflog.Trace(ctx, "updated a graph")
-
-	// service := response.ProjectUpdate.Project
-
-	// data.Id = types.StringValue(service.Id)
-	// data.Title = types.StringValue(service.Title)
-	// data.OnboardingArchitecture = types.StringValue(service.OnboardingArchitecture)
-	// data.OrganizationId = types.StringValue(service.AccountId)
-	// data.Description = types.StringValue(service.Description)
+	tflog.Trace(ctx, "updated a graph")
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -233,4 +228,28 @@ func (r *GraphResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 
 func (r *GraphResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+}
+
+func updateTitle(ctx context.Context, client graphql.Client, data *GraphResourceModel) error {
+	response, err := updateServiceTitle(ctx, client, data.Id.ValueString(), data.Title.ValueString())
+
+	if err != nil {
+		return err
+	}
+
+	data.Title = types.StringValue(response.Service.UpdateTitle.Title)
+
+	return nil
+}
+
+func updateDescription(ctx context.Context, client graphql.Client, data *GraphResourceModel) error {
+	response, err := updateServiceDescription(ctx, client, data.Id.ValueString(), data.Description.ValueString())
+
+	if err != nil {
+		return err
+	}
+
+	data.Description = types.StringValue(response.Service.UpdateDescription.Description)
+
+	return nil
 }
