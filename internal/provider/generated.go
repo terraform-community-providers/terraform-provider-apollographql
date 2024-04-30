@@ -9,6 +9,34 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// Key includes the GraphQL fields of GraphApiKey requested by the fragment Key.
+// The GraphQL type's documentation follows.
+//
+// Represents a graph API key, which has permissions scoped to a
+// user role for a single Apollo graph.
+type Key struct {
+	// The API key's ID.
+	Id string `json:"id"`
+	// The API key's name, for distinguishing it from other keys.
+	KeyName string `json:"keyName"`
+	// The permission level assigned to the API key upon creation.
+	Role string `json:"role"`
+	// The value of the API key. **This is a secret credential!**
+	Token string `json:"token"`
+}
+
+// GetId returns Key.Id, and is useful for accessing the field via an interface.
+func (v *Key) GetId() string { return v.Id }
+
+// GetKeyName returns Key.KeyName, and is useful for accessing the field via an interface.
+func (v *Key) GetKeyName() string { return v.KeyName }
+
+// GetRole returns Key.Role, and is useful for accessing the field via an interface.
+func (v *Key) GetRole() string { return v.Role }
+
+// GetToken returns Key.Token, and is useful for accessing the field via an interface.
+func (v *Key) GetToken() string { return v.Token }
+
 // Service includes the GraphQL fields of Service requested by the fragment Service.
 // The GraphQL type's documentation follows.
 //
@@ -67,6 +95,22 @@ func (v *Variant) GetIsPublic() bool { return v.IsPublic }
 // GetGraphId returns Variant.GraphId, and is useful for accessing the field via an interface.
 func (v *Variant) GetGraphId() string { return v.GraphId }
 
+// __createKeyInput is used internally by genqlient
+type __createKeyInput struct {
+	ServiceId string `json:"serviceId"`
+	KeyName   string `json:"keyName"`
+	Role      string `json:"role"`
+}
+
+// GetServiceId returns __createKeyInput.ServiceId, and is useful for accessing the field via an interface.
+func (v *__createKeyInput) GetServiceId() string { return v.ServiceId }
+
+// GetKeyName returns __createKeyInput.KeyName, and is useful for accessing the field via an interface.
+func (v *__createKeyInput) GetKeyName() string { return v.KeyName }
+
+// GetRole returns __createKeyInput.Role, and is useful for accessing the field via an interface.
+func (v *__createKeyInput) GetRole() string { return v.Role }
+
 // __createServiceInput is used internally by genqlient
 type __createServiceInput struct {
 	Id                     string `json:"id"`
@@ -102,6 +146,18 @@ func (v *__createVariantInput) GetServiceId() string { return v.ServiceId }
 
 // GetVariantName returns __createVariantInput.VariantName, and is useful for accessing the field via an interface.
 func (v *__createVariantInput) GetVariantName() string { return v.VariantName }
+
+// __deleteKeyInput is used internally by genqlient
+type __deleteKeyInput struct {
+	ServiceId string `json:"serviceId"`
+	KeyId     string `json:"keyId"`
+}
+
+// GetServiceId returns __deleteKeyInput.ServiceId, and is useful for accessing the field via an interface.
+func (v *__deleteKeyInput) GetServiceId() string { return v.ServiceId }
+
+// GetKeyId returns __deleteKeyInput.KeyId, and is useful for accessing the field via an interface.
+func (v *__deleteKeyInput) GetKeyId() string { return v.KeyId }
 
 // __deleteServiceInput is used internally by genqlient
 type __deleteServiceInput struct {
@@ -143,6 +199,30 @@ func (v *__getVariantInput) GetServiceId() string { return v.ServiceId }
 // GetVariantName returns __getVariantInput.VariantName, and is useful for accessing the field via an interface.
 func (v *__getVariantInput) GetVariantName() string { return v.VariantName }
 
+// __listKeysInput is used internally by genqlient
+type __listKeysInput struct {
+	ServiceId string `json:"serviceId"`
+}
+
+// GetServiceId returns __listKeysInput.ServiceId, and is useful for accessing the field via an interface.
+func (v *__listKeysInput) GetServiceId() string { return v.ServiceId }
+
+// __updateKeyInput is used internally by genqlient
+type __updateKeyInput struct {
+	ServiceId string `json:"serviceId"`
+	KeyId     string `json:"keyId"`
+	KeyName   string `json:"keyName"`
+}
+
+// GetServiceId returns __updateKeyInput.ServiceId, and is useful for accessing the field via an interface.
+func (v *__updateKeyInput) GetServiceId() string { return v.ServiceId }
+
+// GetKeyId returns __updateKeyInput.KeyId, and is useful for accessing the field via an interface.
+func (v *__updateKeyInput) GetKeyId() string { return v.KeyId }
+
+// GetKeyName returns __updateKeyInput.KeyName, and is useful for accessing the field via an interface.
+func (v *__updateKeyInput) GetKeyName() string { return v.KeyName }
+
 // __updateServiceDescriptionInput is used internally by genqlient
 type __updateServiceDescriptionInput struct {
 	Id          string `json:"id"`
@@ -182,6 +262,102 @@ func (v *__updateVariantIsPublicInput) GetVariantName() string { return v.Varian
 
 // GetIsPublic returns __updateVariantIsPublicInput.IsPublic, and is useful for accessing the field via an interface.
 func (v *__updateVariantIsPublicInput) GetIsPublic() bool { return v.IsPublic }
+
+// createKeyResponse is returned by createKey on success.
+type createKeyResponse struct {
+	Service createKeyServiceServiceMutation `json:"service"`
+}
+
+// GetService returns createKeyResponse.Service, and is useful for accessing the field via an interface.
+func (v *createKeyResponse) GetService() createKeyServiceServiceMutation { return v.Service }
+
+// createKeyServiceServiceMutation includes the requested fields of the GraphQL type ServiceMutation.
+// The GraphQL type's documentation follows.
+//
+// Provides access to mutation fields for managing Studio graphs and subgraphs.
+type createKeyServiceServiceMutation struct {
+	// Generates a new graph API key for this graph with the specified permission level.
+	NewKey createKeyServiceServiceMutationNewKeyGraphApiKey `json:"newKey"`
+}
+
+// GetNewKey returns createKeyServiceServiceMutation.NewKey, and is useful for accessing the field via an interface.
+func (v *createKeyServiceServiceMutation) GetNewKey() createKeyServiceServiceMutationNewKeyGraphApiKey {
+	return v.NewKey
+}
+
+// createKeyServiceServiceMutationNewKeyGraphApiKey includes the requested fields of the GraphQL type GraphApiKey.
+// The GraphQL type's documentation follows.
+//
+// Represents a graph API key, which has permissions scoped to a
+// user role for a single Apollo graph.
+type createKeyServiceServiceMutationNewKeyGraphApiKey struct {
+	Key `json:"-"`
+}
+
+// GetId returns createKeyServiceServiceMutationNewKeyGraphApiKey.Id, and is useful for accessing the field via an interface.
+func (v *createKeyServiceServiceMutationNewKeyGraphApiKey) GetId() string { return v.Key.Id }
+
+// GetKeyName returns createKeyServiceServiceMutationNewKeyGraphApiKey.KeyName, and is useful for accessing the field via an interface.
+func (v *createKeyServiceServiceMutationNewKeyGraphApiKey) GetKeyName() string { return v.Key.KeyName }
+
+// GetRole returns createKeyServiceServiceMutationNewKeyGraphApiKey.Role, and is useful for accessing the field via an interface.
+func (v *createKeyServiceServiceMutationNewKeyGraphApiKey) GetRole() string { return v.Key.Role }
+
+// GetToken returns createKeyServiceServiceMutationNewKeyGraphApiKey.Token, and is useful for accessing the field via an interface.
+func (v *createKeyServiceServiceMutationNewKeyGraphApiKey) GetToken() string { return v.Key.Token }
+
+func (v *createKeyServiceServiceMutationNewKeyGraphApiKey) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*createKeyServiceServiceMutationNewKeyGraphApiKey
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.createKeyServiceServiceMutationNewKeyGraphApiKey = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.Key)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalcreateKeyServiceServiceMutationNewKeyGraphApiKey struct {
+	Id string `json:"id"`
+
+	KeyName string `json:"keyName"`
+
+	Role string `json:"role"`
+
+	Token string `json:"token"`
+}
+
+func (v *createKeyServiceServiceMutationNewKeyGraphApiKey) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *createKeyServiceServiceMutationNewKeyGraphApiKey) __premarshalJSON() (*__premarshalcreateKeyServiceServiceMutationNewKeyGraphApiKey, error) {
+	var retval __premarshalcreateKeyServiceServiceMutationNewKeyGraphApiKey
+
+	retval.Id = v.Key.Id
+	retval.KeyName = v.Key.KeyName
+	retval.Role = v.Key.Role
+	retval.Token = v.Key.Token
+	return &retval, nil
+}
 
 // createServiceNewService includes the requested fields of the GraphQL type Service.
 // The GraphQL type's documentation follows.
@@ -310,6 +486,26 @@ type createVariantServiceServiceMutationUploadSchemaUploadSchemaMutationResponse
 func (v *createVariantServiceServiceMutationUploadSchemaUploadSchemaMutationResponse) GetSuccess() bool {
 	return v.Success
 }
+
+// deleteKeyResponse is returned by deleteKey on success.
+type deleteKeyResponse struct {
+	Service deleteKeyServiceServiceMutation `json:"service"`
+}
+
+// GetService returns deleteKeyResponse.Service, and is useful for accessing the field via an interface.
+func (v *deleteKeyResponse) GetService() deleteKeyServiceServiceMutation { return v.Service }
+
+// deleteKeyServiceServiceMutation includes the requested fields of the GraphQL type ServiceMutation.
+// The GraphQL type's documentation follows.
+//
+// Provides access to mutation fields for managing Studio graphs and subgraphs.
+type deleteKeyServiceServiceMutation struct {
+	// Deletes the existing graph API key with the provided ID, if any.
+	RemoveKey interface{} `json:"removeKey"`
+}
+
+// GetRemoveKey returns deleteKeyServiceServiceMutation.RemoveKey, and is useful for accessing the field via an interface.
+func (v *deleteKeyServiceServiceMutation) GetRemoveKey() interface{} { return v.RemoveKey }
 
 // deleteServiceResponse is returned by deleteService on success.
 type deleteServiceResponse struct {
@@ -571,6 +767,202 @@ func (v *getVariantServiceVariantGraphVariant) __premarshalJSON() (*__premarshal
 	retval.Name = v.Variant.Name
 	retval.IsPublic = v.Variant.IsPublic
 	retval.GraphId = v.Variant.GraphId
+	return &retval, nil
+}
+
+// listKeysResponse is returned by listKeys on success.
+type listKeysResponse struct {
+	// Service by ID
+	Service listKeysService `json:"service"`
+}
+
+// GetService returns listKeysResponse.Service, and is useful for accessing the field via an interface.
+func (v *listKeysResponse) GetService() listKeysService { return v.Service }
+
+// listKeysService includes the requested fields of the GraphQL type Service.
+// The GraphQL type's documentation follows.
+//
+// A graph in Apollo Studio represents a graph in your organization.
+// Each graph has one or more variants, which correspond to the different
+// environments where that graph runs (such as staging and production).
+// Each variant has its own GraphQL schema, which means schemas can differ between environments.
+type listKeysService struct {
+	// A list of the graph API keys that are active for this graph.
+	ApiKeys []listKeysServiceApiKeysGraphApiKey `json:"apiKeys"`
+}
+
+// GetApiKeys returns listKeysService.ApiKeys, and is useful for accessing the field via an interface.
+func (v *listKeysService) GetApiKeys() []listKeysServiceApiKeysGraphApiKey { return v.ApiKeys }
+
+// listKeysServiceApiKeysGraphApiKey includes the requested fields of the GraphQL type GraphApiKey.
+// The GraphQL type's documentation follows.
+//
+// Represents a graph API key, which has permissions scoped to a
+// user role for a single Apollo graph.
+type listKeysServiceApiKeysGraphApiKey struct {
+	Key `json:"-"`
+}
+
+// GetId returns listKeysServiceApiKeysGraphApiKey.Id, and is useful for accessing the field via an interface.
+func (v *listKeysServiceApiKeysGraphApiKey) GetId() string { return v.Key.Id }
+
+// GetKeyName returns listKeysServiceApiKeysGraphApiKey.KeyName, and is useful for accessing the field via an interface.
+func (v *listKeysServiceApiKeysGraphApiKey) GetKeyName() string { return v.Key.KeyName }
+
+// GetRole returns listKeysServiceApiKeysGraphApiKey.Role, and is useful for accessing the field via an interface.
+func (v *listKeysServiceApiKeysGraphApiKey) GetRole() string { return v.Key.Role }
+
+// GetToken returns listKeysServiceApiKeysGraphApiKey.Token, and is useful for accessing the field via an interface.
+func (v *listKeysServiceApiKeysGraphApiKey) GetToken() string { return v.Key.Token }
+
+func (v *listKeysServiceApiKeysGraphApiKey) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*listKeysServiceApiKeysGraphApiKey
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.listKeysServiceApiKeysGraphApiKey = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.Key)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshallistKeysServiceApiKeysGraphApiKey struct {
+	Id string `json:"id"`
+
+	KeyName string `json:"keyName"`
+
+	Role string `json:"role"`
+
+	Token string `json:"token"`
+}
+
+func (v *listKeysServiceApiKeysGraphApiKey) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *listKeysServiceApiKeysGraphApiKey) __premarshalJSON() (*__premarshallistKeysServiceApiKeysGraphApiKey, error) {
+	var retval __premarshallistKeysServiceApiKeysGraphApiKey
+
+	retval.Id = v.Key.Id
+	retval.KeyName = v.Key.KeyName
+	retval.Role = v.Key.Role
+	retval.Token = v.Key.Token
+	return &retval, nil
+}
+
+// updateKeyResponse is returned by updateKey on success.
+type updateKeyResponse struct {
+	Service updateKeyServiceServiceMutation `json:"service"`
+}
+
+// GetService returns updateKeyResponse.Service, and is useful for accessing the field via an interface.
+func (v *updateKeyResponse) GetService() updateKeyServiceServiceMutation { return v.Service }
+
+// updateKeyServiceServiceMutation includes the requested fields of the GraphQL type ServiceMutation.
+// The GraphQL type's documentation follows.
+//
+// Provides access to mutation fields for managing Studio graphs and subgraphs.
+type updateKeyServiceServiceMutation struct {
+	// Sets a new name for the graph API key with the provided ID, if any. This does not invalidate the key or change its value.
+	RenameKey updateKeyServiceServiceMutationRenameKeyGraphApiKey `json:"renameKey"`
+}
+
+// GetRenameKey returns updateKeyServiceServiceMutation.RenameKey, and is useful for accessing the field via an interface.
+func (v *updateKeyServiceServiceMutation) GetRenameKey() updateKeyServiceServiceMutationRenameKeyGraphApiKey {
+	return v.RenameKey
+}
+
+// updateKeyServiceServiceMutationRenameKeyGraphApiKey includes the requested fields of the GraphQL type GraphApiKey.
+// The GraphQL type's documentation follows.
+//
+// Represents a graph API key, which has permissions scoped to a
+// user role for a single Apollo graph.
+type updateKeyServiceServiceMutationRenameKeyGraphApiKey struct {
+	Key `json:"-"`
+}
+
+// GetId returns updateKeyServiceServiceMutationRenameKeyGraphApiKey.Id, and is useful for accessing the field via an interface.
+func (v *updateKeyServiceServiceMutationRenameKeyGraphApiKey) GetId() string { return v.Key.Id }
+
+// GetKeyName returns updateKeyServiceServiceMutationRenameKeyGraphApiKey.KeyName, and is useful for accessing the field via an interface.
+func (v *updateKeyServiceServiceMutationRenameKeyGraphApiKey) GetKeyName() string {
+	return v.Key.KeyName
+}
+
+// GetRole returns updateKeyServiceServiceMutationRenameKeyGraphApiKey.Role, and is useful for accessing the field via an interface.
+func (v *updateKeyServiceServiceMutationRenameKeyGraphApiKey) GetRole() string { return v.Key.Role }
+
+// GetToken returns updateKeyServiceServiceMutationRenameKeyGraphApiKey.Token, and is useful for accessing the field via an interface.
+func (v *updateKeyServiceServiceMutationRenameKeyGraphApiKey) GetToken() string { return v.Key.Token }
+
+func (v *updateKeyServiceServiceMutationRenameKeyGraphApiKey) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*updateKeyServiceServiceMutationRenameKeyGraphApiKey
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.updateKeyServiceServiceMutationRenameKeyGraphApiKey = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.Key)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalupdateKeyServiceServiceMutationRenameKeyGraphApiKey struct {
+	Id string `json:"id"`
+
+	KeyName string `json:"keyName"`
+
+	Role string `json:"role"`
+
+	Token string `json:"token"`
+}
+
+func (v *updateKeyServiceServiceMutationRenameKeyGraphApiKey) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *updateKeyServiceServiceMutationRenameKeyGraphApiKey) __premarshalJSON() (*__premarshalupdateKeyServiceServiceMutationRenameKeyGraphApiKey, error) {
+	var retval __premarshalupdateKeyServiceServiceMutationRenameKeyGraphApiKey
+
+	retval.Id = v.Key.Id
+	retval.KeyName = v.Key.KeyName
+	retval.Role = v.Key.Role
+	retval.Token = v.Key.Token
 	return &retval, nil
 }
 
@@ -922,6 +1314,50 @@ func (v *updateVariantIsPublicServiceServiceMutationVariantGraphVariantMutationU
 	return &retval, nil
 }
 
+func createKey(
+	ctx context.Context,
+	client graphql.Client,
+	serviceId string,
+	keyName string,
+	role string,
+) (*createKeyResponse, error) {
+	req := &graphql.Request{
+		OpName: "createKey",
+		Query: `
+mutation createKey ($serviceId: ID!, $keyName: String!, $role: UserPermission!) {
+	service(id: $serviceId) {
+		newKey(keyName: $keyName, role: $role) {
+			... Key
+		}
+	}
+}
+fragment Key on GraphApiKey {
+	id
+	keyName
+	role
+	token
+}
+`,
+		Variables: &__createKeyInput{
+			ServiceId: serviceId,
+			KeyName:   keyName,
+			Role:      role,
+		},
+	}
+	var err error
+
+	var data createKeyResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 func createService(
 	ctx context.Context,
 	client graphql.Client,
@@ -994,6 +1430,40 @@ mutation createVariant ($serviceId: ID!, $variantName: String!) {
 	var err error
 
 	var data createVariantResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func deleteKey(
+	ctx context.Context,
+	client graphql.Client,
+	serviceId string,
+	keyId string,
+) (*deleteKeyResponse, error) {
+	req := &graphql.Request{
+		OpName: "deleteKey",
+		Query: `
+mutation deleteKey ($serviceId: ID!, $keyId: ID!) {
+	service(id: $serviceId) {
+		removeKey(id: $keyId)
+	}
+}
+`,
+		Variables: &__deleteKeyInput{
+			ServiceId: serviceId,
+			KeyId:     keyId,
+		},
+	}
+	var err error
+
+	var data deleteKeyResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -1145,6 +1615,90 @@ fragment Variant on GraphVariant {
 	var err error
 
 	var data getVariantResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func listKeys(
+	ctx context.Context,
+	client graphql.Client,
+	serviceId string,
+) (*listKeysResponse, error) {
+	req := &graphql.Request{
+		OpName: "listKeys",
+		Query: `
+query listKeys ($serviceId: ID!) {
+	service(id: $serviceId) {
+		apiKeys {
+			... Key
+		}
+	}
+}
+fragment Key on GraphApiKey {
+	id
+	keyName
+	role
+	token
+}
+`,
+		Variables: &__listKeysInput{
+			ServiceId: serviceId,
+		},
+	}
+	var err error
+
+	var data listKeysResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func updateKey(
+	ctx context.Context,
+	client graphql.Client,
+	serviceId string,
+	keyId string,
+	keyName string,
+) (*updateKeyResponse, error) {
+	req := &graphql.Request{
+		OpName: "updateKey",
+		Query: `
+mutation updateKey ($serviceId: ID!, $keyId: ID!, $keyName: String) {
+	service(id: $serviceId) {
+		renameKey(id: $keyId, newKeyName: $keyName) {
+			... Key
+		}
+	}
+}
+fragment Key on GraphApiKey {
+	id
+	keyName
+	role
+	token
+}
+`,
+		Variables: &__updateKeyInput{
+			ServiceId: serviceId,
+			KeyId:     keyId,
+			KeyName:   keyName,
+		},
+	}
+	var err error
+
+	var data updateKeyResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

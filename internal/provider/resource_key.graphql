@@ -1,0 +1,36 @@
+fragment Key on GraphApiKey {
+  id
+  keyName
+  role
+  token
+}
+
+query listKeys($serviceId: ID!) {
+  service(id: $serviceId) {
+    apiKeys {
+      ...Key
+    }
+  }
+}
+
+mutation createKey($serviceId: ID!, $keyName: String!, $role: UserPermission!) {
+  service(id: $serviceId) {
+    newKey(keyName: $keyName, role: $role) {
+      ...Key
+    }
+  }
+}
+
+mutation updateKey($serviceId: ID!, $keyId: ID!, $keyName: String) {
+  service(id: $serviceId) {
+    renameKey(id: $keyId, newKeyName: $keyName) {
+      ...Key
+    }
+  }
+}
+
+mutation deleteKey($serviceId: ID!, $keyId: ID!) {
+  service(id: $serviceId) {
+    removeKey(id: $keyId)
+  }
+}

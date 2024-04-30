@@ -92,6 +92,7 @@ func (p *ApolloGraphQLProvider) Resources(ctx context.Context) []func() resource
 	return []func() resource.Resource{
 		NewGraphResource,
 		NewVariantResource,
+		NewKeyResource,
 	}
 }
 

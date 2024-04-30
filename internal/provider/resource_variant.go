@@ -50,9 +50,6 @@ func (r *VariantResource) Schema(ctx context.Context, req resource.SchemaRequest
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtLeast(1),
-				},
 			},
 			"name": schema.StringAttribute{
 				MarkdownDescription: "Name of the variant.",

@@ -5,6 +5,8 @@ generated: internal/provider/generated.go
 bindings:
   OnboardingArchitecture:
     type: string
+  UserPermission:
+    type: string
   Void:
     type: interface{}
   Timestamp:
