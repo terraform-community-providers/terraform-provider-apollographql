@@ -129,9 +129,19 @@ func (r *VariantResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
+	if data.Public.ValueBool() {
+		err := updateVariantPublic(ctx, *r.client, data)
+
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update variant, got error: %s", err))
+			return
+		}
+
+		tflog.Trace(ctx, "updated a variant")
+	}
+
 	data.Id = types.StringValue(variant.Id)
 	data.Name = types.StringValue(variant.Name)
-	data.Public = types.BoolValue(variant.IsPublic)
 	data.GraphId = types.StringValue(variant.GraphId)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -178,7 +188,7 @@ func (r *VariantResource) Update(ctx context.Context, req resource.UpdateRequest
 	}
 
 	if data.Public.ValueBool() != state.Public.ValueBool() {
-		response, err := updateVariantIsPublic(ctx, *r.client, data.GraphId.ValueString(), data.Name.ValueString(), data.Public.ValueBool())
+		err := updateVariantPublic(ctx, *r.client, data)
 
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update variant, got error: %s", err))
@@ -186,8 +196,6 @@ func (r *VariantResource) Update(ctx context.Context, req resource.UpdateRequest
 		}
 
 		tflog.Trace(ctx, "updated a variant")
-
-		data.Public = types.BoolValue(response.Service.Variant.UpdateVariantIsPublic.Variant.IsPublic)
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -202,7 +210,7 @@ func (r *VariantResource) Delete(ctx context.Context, req resource.DeleteRequest
 		return
 	}
 
-	_, err := deleteService(ctx, *r.client, data.Id.ValueString())
+	_, err := deleteVariant(ctx, *r.client, data.GraphId.ValueString(), data.Name.ValueString())
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete variant, got error: %s", err))
@@ -224,14 +232,8 @@ func (r *VariantResource) ImportState(ctx context.Context, req resource.ImportSt
 		return
 	}
 
-	variant, err := readVariant(ctx, *r.client, parts[0], parts[1])
-
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read variant, got error: %s", err))
-		return
-	}
-
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), variant.Id)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), parts[1])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("graph_id"), parts[0])...)
 }
 
 func readVariant(ctx context.Context, client graphql.Client, serviceId string, variantName string) (*Variant, error) {
@@ -244,4 +246,16 @@ func readVariant(ctx context.Context, client graphql.Client, serviceId string, v
 	variant := response.Service.Variant.Variant
 
 	return &variant, nil
+}
+
+func updateVariantPublic(ctx context.Context, client graphql.Client, data *VariantResourceModel) error {
+	response, err := updateVariantIsPublic(ctx, client, data.GraphId.ValueString(), data.Name.ValueString(), data.Public.ValueBool())
+
+	if err != nil {
+		return err
+	}
+
+	data.Public = types.BoolValue(response.Service.Variant.UpdateVariantIsPublic.Variant.IsPublic)
+
+	return nil
 }

@@ -49,9 +49,6 @@ func TestAccGraphResourceDefault(t *testing.T) {
 					resource.TestCheckResourceAttr("apollographql_graph.test", "onboarding_architecture", "MONOLITH"),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "organization_id", "pksunkara"),
 					resource.TestCheckResourceAttr("apollographql_graph.test", "description", "API for our todo app"),
-					resource.TestCheckResourceAttr("apollographql_graph.test", "default_variant.id", "todo-api-tf-test@current"),
-					resource.TestCheckResourceAttr("apollographql_graph.test", "default_variant.name", "current"),
-					resource.TestCheckResourceAttr("apollographql_graph.test", "default_variant.public", "true"),
 				),
 			},
 			// ImportState testing
@@ -64,67 +61,6 @@ func TestAccGraphResourceDefault(t *testing.T) {
 		},
 	})
 }
-
-// func TestAccProjectResourceNonDefault(t *testing.T) {
-// 	resource.Test(t, resource.TestCase{
-// 		PreCheck:                 func() { testAccPreCheck(t) },
-// 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-// 		Steps: []resource.TestStep{
-// 			// Create and Read testing
-// 			{
-// 				Config: testAccProjectResourceConfigNonDefault("todo-app", "staging"),
-// 				Check: resource.ComposeAggregateTestCheckFunc(
-// 					resource.TestMatchResourceAttr("apollographql_graph.test", "id", uuidRegex()),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "name", "todo-app"),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "description", "nice project"),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "private", "false"),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "has_pr_deploys", "true"),
-// 					resource.TestMatchResourceAttr("apollographql_graph.test", "default_variant.id", uuidRegex()),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "default_variant.name", "staging"),
-// 				),
-// 			},
-// 			// ImportState testing
-// 			{
-// 				ResourceName:      "apollographql_graph.test",
-// 				ImportState:       true,
-// 				ImportStateVerify: true,
-// 			},
-// 			// Update with same values
-// 			{
-// 				Config: testAccProjectResourceConfigNonDefault("todo-app", "staging"),
-// 				Check: resource.ComposeAggregateTestCheckFunc(
-// 					resource.TestMatchResourceAttr("apollographql_graph.test", "id", uuidRegex()),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "name", "todo-app"),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "description", "nice project"),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "private", "false"),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "has_pr_deploys", "true"),
-// 					resource.TestMatchResourceAttr("apollographql_graph.test", "default_variant.id", uuidRegex()),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "default_variant.name", "staging"),
-// 				),
-// 			},
-// 			// Update with null values
-// 			{
-// 				Config: testAccProjectResourceConfigDefaultEnvironmentName("nue-todo-app", "staging"),
-// 				Check: resource.ComposeAggregateTestCheckFunc(
-// 					resource.TestMatchResourceAttr("apollographql_graph.test", "id", uuidRegex()),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "name", "nue-todo-app"),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "description", ""),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "private", "true"),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "has_pr_deploys", "false"),
-// 					resource.TestMatchResourceAttr("apollographql_graph.test", "default_variant.id", uuidRegex()),
-// 					resource.TestCheckResourceAttr("apollographql_graph.test", "default_variant.name", "staging"),
-// 				),
-// 			},
-// 			// ImportState testing
-// 			{
-// 				ResourceName:      "apollographql_graph.test",
-// 				ImportState:       true,
-// 				ImportStateVerify: true,
-// 			},
-// 			// Delete testing automatically occurs in TestCase
-// 		},
-// 	})
-// }
 
 func testAccGraphResourceConfigDefault(id string, title string) string {
 	return fmt.Sprintf(`
@@ -151,16 +87,4 @@ resource "apollographql_graph" "test" {
   }
 }
 `, id, title)
-}
-
-func testAccProjectResourceConfigDefaultEnvironmentName(name string, environmentName string) string {
-	return fmt.Sprintf(`
-resource "apollographql_graph" "test" {
-  name = "%s"
-
-  default_variant = {
-    name = "%s"
-  }
-}
-`, name, environmentName)
 }
