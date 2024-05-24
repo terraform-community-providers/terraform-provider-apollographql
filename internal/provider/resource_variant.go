@@ -33,6 +33,7 @@ type VariantResourceModel struct {
 	Id      types.String `tfsdk:"id"`
 	Name    types.String `tfsdk:"name"`
 	Public  types.Bool   `tfsdk:"public"`
+	Url     types.String `tfsdk:"url"`
 	GraphId types.String `tfsdk:"graph_id"`
 }
 
@@ -66,6 +67,10 @@ func (r *VariantResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Optional:            true,
 				Computed:            true,
 				Default:             booldefault.StaticBool(false),
+			},
+			"url": schema.StringAttribute{
+				MarkdownDescription: "URL of the variant.",
+				Optional:            true,
 			},
 			"graph_id": schema.StringAttribute{
 				MarkdownDescription: "Identifier of the graph the variant belongs to.",
@@ -137,6 +142,17 @@ func (r *VariantResource) Create(ctx context.Context, req resource.CreateRequest
 		tflog.Trace(ctx, "updated a variant")
 	}
 
+	if !data.Url.IsNull() && !data.Url.IsUnknown() {
+		err := updateUrl(ctx, *r.client, data)
+
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update variant, got error: %s", err))
+			return
+		}
+
+		tflog.Trace(ctx, "updated a variant")
+	}
+
 	data.Id = types.StringValue(variant.Id)
 	data.Name = types.StringValue(variant.Name)
 	data.GraphId = types.StringValue(variant.GraphId)
@@ -163,6 +179,7 @@ func (r *VariantResource) Read(ctx context.Context, req resource.ReadRequest, re
 	data.Id = types.StringValue(variant.Id)
 	data.Name = types.StringValue(variant.Name)
 	data.Public = types.BoolValue(variant.IsPublic)
+	data.Url = types.StringPointerValue(variant.Url)
 	data.GraphId = types.StringValue(variant.GraphId)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -186,6 +203,17 @@ func (r *VariantResource) Update(ctx context.Context, req resource.UpdateRequest
 
 	if data.Public.ValueBool() != state.Public.ValueBool() {
 		err := updatePublic(ctx, *r.client, data)
+
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update variant, got error: %s", err))
+			return
+		}
+
+		tflog.Trace(ctx, "updated a variant")
+	}
+
+	if data.Url.ValueStringPointer() != state.Url.ValueStringPointer() {
+		err := updateUrl(ctx, *r.client, data)
 
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update variant, got error: %s", err))
@@ -253,6 +281,18 @@ func updatePublic(ctx context.Context, client graphql.Client, data *VariantResou
 	}
 
 	data.Public = types.BoolValue(response.Service.Variant.UpdateVariantIsPublic.Variant.IsPublic)
+
+	return nil
+}
+
+func updateUrl(ctx context.Context, client graphql.Client, data *VariantResourceModel) error {
+	response, err := updateVariantURL(ctx, client, data.GraphId.ValueString(), data.Name.ValueString(), data.Url.ValueStringPointer())
+
+	if err != nil {
+		return err
+	}
+
+	data.Url = types.StringPointerValue(response.Service.Variant.UpdateURL.Variant.Url)
 
 	return nil
 }

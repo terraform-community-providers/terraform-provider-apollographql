@@ -79,6 +79,9 @@ type Variant struct {
 	// The variant's name (e.g., `staging`).
 	Name     string `json:"name"`
 	IsPublic bool   `json:"isPublic"`
+	// The URL of the variant's GraphQL endpoint for query and mutation operations.
+	// For subscription operations, use `subscriptionUrl`.
+	Url *string `json:"url"`
 	// Graph ID of the variant. Prefer using graph { id } when feasible.
 	GraphId string `json:"graphId"`
 }
@@ -91,6 +94,9 @@ func (v *Variant) GetName() string { return v.Name }
 
 // GetIsPublic returns Variant.IsPublic, and is useful for accessing the field via an interface.
 func (v *Variant) GetIsPublic() bool { return v.IsPublic }
+
+// GetUrl returns Variant.Url, and is useful for accessing the field via an interface.
+func (v *Variant) GetUrl() *string { return v.Url }
 
 // GetGraphId returns Variant.GraphId, and is useful for accessing the field via an interface.
 func (v *Variant) GetGraphId() string { return v.GraphId }
@@ -262,6 +268,22 @@ func (v *__updateVariantIsPublicInput) GetVariantName() string { return v.Varian
 
 // GetIsPublic returns __updateVariantIsPublicInput.IsPublic, and is useful for accessing the field via an interface.
 func (v *__updateVariantIsPublicInput) GetIsPublic() bool { return v.IsPublic }
+
+// __updateVariantURLInput is used internally by genqlient
+type __updateVariantURLInput struct {
+	ServiceId   string  `json:"serviceId"`
+	VariantName string  `json:"variantName"`
+	Url         *string `json:"url"`
+}
+
+// GetServiceId returns __updateVariantURLInput.ServiceId, and is useful for accessing the field via an interface.
+func (v *__updateVariantURLInput) GetServiceId() string { return v.ServiceId }
+
+// GetVariantName returns __updateVariantURLInput.VariantName, and is useful for accessing the field via an interface.
+func (v *__updateVariantURLInput) GetVariantName() string { return v.VariantName }
+
+// GetUrl returns __updateVariantURLInput.Url, and is useful for accessing the field via an interface.
+func (v *__updateVariantURLInput) GetUrl() *string { return v.Url }
 
 // createKeyResponse is returned by createKey on success.
 type createKeyResponse struct {
@@ -714,6 +736,9 @@ func (v *getVariantServiceVariantGraphVariant) GetName() string { return v.Varia
 // GetIsPublic returns getVariantServiceVariantGraphVariant.IsPublic, and is useful for accessing the field via an interface.
 func (v *getVariantServiceVariantGraphVariant) GetIsPublic() bool { return v.Variant.IsPublic }
 
+// GetUrl returns getVariantServiceVariantGraphVariant.Url, and is useful for accessing the field via an interface.
+func (v *getVariantServiceVariantGraphVariant) GetUrl() *string { return v.Variant.Url }
+
 // GetGraphId returns getVariantServiceVariantGraphVariant.GraphId, and is useful for accessing the field via an interface.
 func (v *getVariantServiceVariantGraphVariant) GetGraphId() string { return v.Variant.GraphId }
 
@@ -749,6 +774,8 @@ type __premarshalgetVariantServiceVariantGraphVariant struct {
 
 	IsPublic bool `json:"isPublic"`
 
+	Url *string `json:"url"`
+
 	GraphId string `json:"graphId"`
 }
 
@@ -766,6 +793,7 @@ func (v *getVariantServiceVariantGraphVariant) __premarshalJSON() (*__premarshal
 	retval.Id = v.Variant.Id
 	retval.Name = v.Variant.Name
 	retval.IsPublic = v.Variant.IsPublic
+	retval.Url = v.Variant.Url
 	retval.GraphId = v.Variant.GraphId
 	return &retval, nil
 }
@@ -1256,6 +1284,11 @@ func (v *updateVariantIsPublicServiceServiceMutationVariantGraphVariantMutationU
 	return v.Variant.IsPublic
 }
 
+// GetUrl returns updateVariantIsPublicServiceServiceMutationVariantGraphVariantMutationUpdateVariantIsPublicGraphVariant.Url, and is useful for accessing the field via an interface.
+func (v *updateVariantIsPublicServiceServiceMutationVariantGraphVariantMutationUpdateVariantIsPublicGraphVariant) GetUrl() *string {
+	return v.Variant.Url
+}
+
 // GetGraphId returns updateVariantIsPublicServiceServiceMutationVariantGraphVariantMutationUpdateVariantIsPublicGraphVariant.GraphId, and is useful for accessing the field via an interface.
 func (v *updateVariantIsPublicServiceServiceMutationVariantGraphVariantMutationUpdateVariantIsPublicGraphVariant) GetGraphId() string {
 	return v.Variant.GraphId
@@ -1293,6 +1326,8 @@ type __premarshalupdateVariantIsPublicServiceServiceMutationVariantGraphVariantM
 
 	IsPublic bool `json:"isPublic"`
 
+	Url *string `json:"url"`
+
 	GraphId string `json:"graphId"`
 }
 
@@ -1310,6 +1345,133 @@ func (v *updateVariantIsPublicServiceServiceMutationVariantGraphVariantMutationU
 	retval.Id = v.Variant.Id
 	retval.Name = v.Variant.Name
 	retval.IsPublic = v.Variant.IsPublic
+	retval.Url = v.Variant.Url
+	retval.GraphId = v.Variant.GraphId
+	return &retval, nil
+}
+
+// updateVariantURLResponse is returned by updateVariantURL on success.
+type updateVariantURLResponse struct {
+	Service updateVariantURLServiceServiceMutation `json:"service"`
+}
+
+// GetService returns updateVariantURLResponse.Service, and is useful for accessing the field via an interface.
+func (v *updateVariantURLResponse) GetService() updateVariantURLServiceServiceMutation {
+	return v.Service
+}
+
+// updateVariantURLServiceServiceMutation includes the requested fields of the GraphQL type ServiceMutation.
+// The GraphQL type's documentation follows.
+//
+// Provides access to mutation fields for managing Studio graphs and subgraphs.
+type updateVariantURLServiceServiceMutation struct {
+	// Make changes to a graph variant.
+	Variant updateVariantURLServiceServiceMutationVariantGraphVariantMutation `json:"variant"`
+}
+
+// GetVariant returns updateVariantURLServiceServiceMutation.Variant, and is useful for accessing the field via an interface.
+func (v *updateVariantURLServiceServiceMutation) GetVariant() updateVariantURLServiceServiceMutationVariantGraphVariantMutation {
+	return v.Variant
+}
+
+// updateVariantURLServiceServiceMutationVariantGraphVariantMutation includes the requested fields of the GraphQL type GraphVariantMutation.
+// The GraphQL type's documentation follows.
+//
+// Modifies a variant of a graph, also called a schema tag in parts of our product.
+type updateVariantURLServiceServiceMutationVariantGraphVariantMutation struct {
+	UpdateURL updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant `json:"updateURL"`
+}
+
+// GetUpdateURL returns updateVariantURLServiceServiceMutationVariantGraphVariantMutation.UpdateURL, and is useful for accessing the field via an interface.
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutation) GetUpdateURL() updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant {
+	return v.UpdateURL
+}
+
+// updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant includes the requested fields of the GraphQL type GraphVariant.
+// The GraphQL type's documentation follows.
+//
+// A graph variant
+type updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant struct {
+	Variant `json:"-"`
+}
+
+// GetId returns updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant.Id, and is useful for accessing the field via an interface.
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant) GetId() string {
+	return v.Variant.Id
+}
+
+// GetName returns updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant.Name, and is useful for accessing the field via an interface.
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant) GetName() string {
+	return v.Variant.Name
+}
+
+// GetIsPublic returns updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant.IsPublic, and is useful for accessing the field via an interface.
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant) GetIsPublic() bool {
+	return v.Variant.IsPublic
+}
+
+// GetUrl returns updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant.Url, and is useful for accessing the field via an interface.
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant) GetUrl() *string {
+	return v.Variant.Url
+}
+
+// GetGraphId returns updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant.GraphId, and is useful for accessing the field via an interface.
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant) GetGraphId() string {
+	return v.Variant.GraphId
+}
+
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.Variant)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalupdateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	IsPublic bool `json:"isPublic"`
+
+	Url *string `json:"url"`
+
+	GraphId string `json:"graphId"`
+}
+
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *updateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant) __premarshalJSON() (*__premarshalupdateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant, error) {
+	var retval __premarshalupdateVariantURLServiceServiceMutationVariantGraphVariantMutationUpdateURLGraphVariant
+
+	retval.Id = v.Variant.Id
+	retval.Name = v.Variant.Name
+	retval.IsPublic = v.Variant.IsPublic
+	retval.Url = v.Variant.Url
 	retval.GraphId = v.Variant.GraphId
 	return &retval, nil
 }
@@ -1604,6 +1766,7 @@ fragment Variant on GraphVariant {
 	id
 	name
 	isPublic
+	url
 	graphId
 }
 `,
@@ -1819,6 +1982,7 @@ fragment Variant on GraphVariant {
 	id
 	name
 	isPublic
+	url
 	graphId
 }
 `,
@@ -1831,6 +1995,53 @@ fragment Variant on GraphVariant {
 	var err error
 
 	var data updateVariantIsPublicResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func updateVariantURL(
+	ctx context.Context,
+	client graphql.Client,
+	serviceId string,
+	variantName string,
+	url *string,
+) (*updateVariantURLResponse, error) {
+	req := &graphql.Request{
+		OpName: "updateVariantURL",
+		Query: `
+mutation updateVariantURL ($serviceId: ID!, $variantName: String!, $url: String) {
+	service(id: $serviceId) {
+		variant(name: $variantName) {
+			updateURL(url: $url) {
+				... Variant
+			}
+		}
+	}
+}
+fragment Variant on GraphVariant {
+	id
+	name
+	isPublic
+	url
+	graphId
+}
+`,
+		Variables: &__updateVariantURLInput{
+			ServiceId:   serviceId,
+			VariantName: variantName,
+			Url:         url,
+		},
+	}
+	var err error
+
+	var data updateVariantURLResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

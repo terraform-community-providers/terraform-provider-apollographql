@@ -1,7 +1,9 @@
+# @genqlient(for: "GraphVariant.url", pointer: true)
 fragment Variant on GraphVariant {
   id
   name
   isPublic
+  url
   graphId
 }
 
@@ -17,6 +19,21 @@ mutation createVariant($serviceId: ID!, $variantName: String!) {
   service(id: $serviceId) {
     uploadSchema(tag: $variantName, schemaDocument: "scalar JSON") {
       success
+    }
+  }
+}
+
+mutation updateVariantURL(
+  $serviceId: ID!
+  $variantName: String!
+  # @genqlient(pointer: true)
+  $url: String
+) {
+  service(id: $serviceId) {
+    variant(name: $variantName) {
+      updateURL(url: $url) {
+        ...Variant
+      }
     }
   }
 }

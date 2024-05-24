@@ -19,6 +19,7 @@ func TestAccVariantResourceDefault(t *testing.T) {
 					resource.TestCheckResourceAttr("apollographql_variant.test", "id", "Test-w4a5n4@Staging"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "name", "Staging"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "public", "false"),
+					resource.TestCheckNoResourceAttr("apollographql_variant.test", "url"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "graph_id", "Test-w4a5n4"),
 				),
 			},
@@ -36,6 +37,7 @@ func TestAccVariantResourceDefault(t *testing.T) {
 					resource.TestCheckResourceAttr("apollographql_variant.test", "id", "Test-w4a5n4@Staging"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "name", "Staging"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "public", "false"),
+					resource.TestCheckNoResourceAttr("apollographql_variant.test", "url"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "graph_id", "Test-w4a5n4"),
 				),
 			},
@@ -46,6 +48,7 @@ func TestAccVariantResourceDefault(t *testing.T) {
 					resource.TestCheckResourceAttr("apollographql_variant.test", "id", "Test-w4a5n4@Staging"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "name", "Staging"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "public", "true"),
+					resource.TestCheckResourceAttr("apollographql_variant.test", "url", "https://example.com"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "graph_id", "Test-w4a5n4"),
 				),
 			},
@@ -73,6 +76,7 @@ func TestAccVariantResourceNonDefault(t *testing.T) {
 					resource.TestCheckResourceAttr("apollographql_variant.test", "id", "Test-w4a5n4@QA"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "name", "QA"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "public", "true"),
+					resource.TestCheckResourceAttr("apollographql_variant.test", "url", "https://example.com"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "graph_id", "Test-w4a5n4"),
 				),
 			},
@@ -90,6 +94,7 @@ func TestAccVariantResourceNonDefault(t *testing.T) {
 					resource.TestCheckResourceAttr("apollographql_variant.test", "id", "Test-w4a5n4@QA"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "name", "QA"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "public", "true"),
+					resource.TestCheckResourceAttr("apollographql_variant.test", "url", "https://example.com"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "graph_id", "Test-w4a5n4"),
 				),
 			},
@@ -100,6 +105,7 @@ func TestAccVariantResourceNonDefault(t *testing.T) {
 					resource.TestCheckResourceAttr("apollographql_variant.test", "id", "Test-w4a5n4@QA"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "name", "QA"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "public", "false"),
+					resource.TestCheckNoResourceAttr("apollographql_variant.test", "url"),
 					resource.TestCheckResourceAttr("apollographql_variant.test", "graph_id", "Test-w4a5n4"),
 				),
 			},
@@ -129,6 +135,7 @@ func testAccVariantResourceConfigNonDefault(name string) string {
 resource "apollographql_variant" "test" {
   name = "%s"
   public = true
+  url = "https://example.com"
   graph_id = "Test-w4a5n4"
 }
 `, name)

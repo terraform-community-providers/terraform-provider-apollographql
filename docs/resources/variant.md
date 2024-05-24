@@ -30,6 +30,7 @@ resource "apollographql_variant" "api" {
 ### Optional
 
 - `public` (Boolean) Whether the variant is public.
+- `url` (String) URL of the variant.
 
 ### Read-Only
 
